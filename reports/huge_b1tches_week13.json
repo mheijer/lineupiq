@@ -1,0 +1,134 @@
+{
+  "starters_assignments": [
+    "Assignment(slot=Slot(name='QB', eligible_positions=['QB']), player=Player(name='Dak Prescott', position='QB', projection=19.2, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='RB1', eligible_positions=['RB']), player=Player(name='Travis Etienne Jr.', position='RB', projection=12.3, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='RB2', eligible_positions=['RB']), player=Player(name='Kenneth Walker III', position='RB', projection=11.2, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='WR1', eligible_positions=['WR']), player=Player(name='Amon-Ra St. Brown', position='WR', projection=12.6, status='QUESTIONABLE', is_starter=True))",
+    "Assignment(slot=Slot(name='WR2', eligible_positions=['WR']), player=Player(name='Jaylen Waddle', position='WR', projection=8.9, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='TE', eligible_positions=['TE']), player=Player(name='Brock Bowers', position='TE', projection=8.7, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='FLEX', eligible_positions=['RB', 'WR', 'TE']), player=Player(name='Tyrone Tracy Jr.', position='RB', projection=9.1, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='DST', eligible_positions=['DST']), player=Player(name='Packers D/ST', position='DST', projection=5.7, status='NORMAL', is_starter=True))",
+    "Assignment(slot=Slot(name='K', eligible_positions=['K']), player=Player(name='Harrison Butker', position='K', projection=8.5, status='ACTIVE', is_starter=True))"
+  ],
+  "bench": [
+    "Player(name='Marvin Harrison Jr.', position='WR', projection=7.2, status='QUESTIONABLE', is_starter=False)",
+    "Player(name='Jordan Addison', position='WR', projection=6.2, status='ACTIVE', is_starter=False)",
+    "Player(name='Kyle Pitts Sr.', position='TE', projection=6.3, status='ACTIVE', is_starter=False)",
+    "Player(name='Tyler Allgeier', position='RB', projection=6.2, status='ACTIVE', is_starter=False)",
+    "Player(name='Jared Goff', position='QB', projection=16.6, status='ACTIVE', is_starter=False)"
+  ],
+  "stash": [
+    "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+    "Player(name='Max Duggan', position='QB', projection=0.0, status='ACTIVE', is_starter=False)",
+    "Player(name='Darren Waller', position='TE', projection=4.6, status='IR', is_starter=False)"
+  ],
+  "bench_swaps": [],
+  "fa_starter_immediate": [
+    [
+      "FreeAgent(name='Eagles D/ST', position='DST', projection=6.6, can_add_now=True)",
+      "Player(name='Packers D/ST', position='DST', projection=5.7, status='NORMAL', is_starter=True)",
+      0.8999999999999995
+    ],
+    [
+      "FreeAgent(name='Buccaneers D/ST', position='DST', projection=6.5, can_add_now=True)",
+      "Player(name='Packers D/ST', position='DST', projection=5.7, status='NORMAL', is_starter=True)",
+      0.7999999999999998
+    ]
+  ],
+  "fa_starter_waiver": [],
+  "fa_bench_immediate": [
+    [
+      "FreeAgent(name='C.J. Stroud', position='QB', projection=16.1, can_add_now=True)",
+      "Player(name='Max Duggan', position='QB', projection=0.0, status='ACTIVE', is_starter=False)",
+      16.1
+    ],
+    [
+      "FreeAgent(name='Brock Purdy', position='QB', projection=16.0, can_add_now=True)",
+      "Player(name='Max Duggan', position='QB', projection=0.0, status='ACTIVE', is_starter=False)",
+      16.0
+    ],
+    [
+      "FreeAgent(name='Aaron Rodgers', position='QB', projection=15.2, can_add_now=True)",
+      "Player(name='Max Duggan', position='QB', projection=0.0, status='ACTIVE', is_starter=False)",
+      15.2
+    ],
+    [
+      "FreeAgent(name='Tua Tagovailoa', position='QB', projection=14.3, can_add_now=True)",
+      "Player(name='Max Duggan', position='QB', projection=0.0, status='ACTIVE', is_starter=False)",
+      14.3
+    ],
+    [
+      "FreeAgent(name='Kyle Monangai', position='RB', projection=7.3, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      7.3
+    ],
+    [
+      "FreeAgent(name='Bhayshul Tuten', position='RB', projection=6.2, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      6.2
+    ],
+    [
+      "FreeAgent(name='Juwan Johnson', position='TE', projection=5.8, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      5.8
+    ],
+    [
+      "FreeAgent(name='Jacory Croskey-Merritt', position='RB', projection=5.6, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      5.6
+    ],
+    [
+      "FreeAgent(name='Cooper Kupp', position='WR', projection=5.6, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      5.6
+    ],
+    [
+      "FreeAgent(name='Devin Singletary', position='RB', projection=5.4, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      5.4
+    ],
+    [
+      "FreeAgent(name='Tez Johnson', position='WR', projection=5.3, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      5.3
+    ],
+    [
+      "FreeAgent(name='AJ Barner', position='TE', projection=4.8, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      4.8
+    ],
+    [
+      "FreeAgent(name='Chuba Hubbard', position='RB', projection=4.2, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      4.2
+    ],
+    [
+      "FreeAgent(name='T.J. Hockenson', position='TE', projection=3.8, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      3.8
+    ],
+    [
+      "FreeAgent(name='Tank Bigsby', position='RB', projection=2.2, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      2.2
+    ],
+    [
+      "FreeAgent(name='Jerome Ford', position='RB', projection=1.8, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      1.8
+    ],
+    [
+      "FreeAgent(name='Keon Coleman', position='WR', projection=1.4, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      1.4
+    ],
+    [
+      "FreeAgent(name='Kaleb Johnson', position='RB', projection=0.9, can_add_now=True)",
+      "Player(name='Hollywood Brown', position='WR', projection=0.0, status='ACTIVE', is_starter=False)",
+      0.9
+    ]
+  ],
+  "fa_bench_waiver": [],
+  "total_expected_points": 96.2,
+  "team_key": "huge_b1tches"
+}

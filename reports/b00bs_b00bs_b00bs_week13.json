@@ -1,0 +1,168 @@
+{
+  "starters_assignments": [
+    "Assignment(slot=Slot(name='QB', eligible_positions=['QB']), player=Player(name='Jordan Love', position='QB', projection=16.2, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='RB1', eligible_positions=['RB']), player=Player(name='Travis Etienne Jr.', position='RB', projection=12.3, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='RB2', eligible_positions=['RB']), player=Player(name=\"D'Andre Swift\", position='RB', projection=9.1, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='WR1', eligible_positions=['WR']), player=Player(name='Amon-Ra St. Brown', position='WR', projection=12.6, status='QUESTIONABLE', is_starter=True))",
+    "Assignment(slot=Slot(name='WR2', eligible_positions=['WR']), player=Player(name='Darnell Mooney', position='WR', projection=6.3, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='TE', eligible_positions=['TE']), player=Player(name='Trey McBride', position='TE', projection=10.1, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='FLEX', eligible_positions=['RB', 'WR', 'TE']), player=Player(name='Jacory Croskey-Merritt', position='RB', projection=5.6, status='ACTIVE', is_starter=False))",
+    "Assignment(slot=Slot(name='DST', eligible_positions=['DST']), player=Player(name='Chiefs D/ST', position='DST', projection=6.0, status='NORMAL', is_starter=False))",
+    "Assignment(slot=Slot(name='K', eligible_positions=['K']), player=Player(name='Cairo Santos', position='K', projection=6.9, status='ACTIVE', is_starter=True))"
+  ],
+  "bench": [
+    "Player(name='Lions D/ST', position='DST', projection=5.4, status='NORMAL', is_starter=True)",
+    "Player(name='Dalton Schultz', position='TE', projection=5.3, status='ACTIVE', is_starter=True)",
+    "Player(name='Rashid Shaheed', position='WR', projection=5.2, status='ACTIVE', is_starter=False)",
+    "Player(name='C.J. Stroud', position='QB', projection=16.1, status='ACTIVE', is_starter=False)"
+  ],
+  "stash": [
+    "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+    "Player(name='Tee Higgins', position='WR', projection=0.0, status='OUT', is_starter=False)"
+  ],
+  "bench_swaps": [
+    [
+      "Player(name='Chiefs D/ST', position='DST', projection=6.0, status='NORMAL', is_starter=False)",
+      "Player(name='Lions D/ST', position='DST', projection=5.4, status='NORMAL', is_starter=True)",
+      0.5999999999999996
+    ],
+    [
+      "Player(name='Jacory Croskey-Merritt', position='RB', projection=5.6, status='ACTIVE', is_starter=False)",
+      "Player(name='Dalton Schultz', position='TE', projection=5.3, status='ACTIVE', is_starter=True)",
+      0.2999999999999998
+    ]
+  ],
+  "fa_starter_immediate": [
+    [
+      "FreeAgent(name='Tony Pollard', position='RB', projection=7.2, can_add_now=True)",
+      "Player(name='Jacory Croskey-Merritt', position='RB', projection=5.6, status='ACTIVE', is_starter=False)",
+      1.6000000000000005
+    ],
+    [
+      "FreeAgent(name='Dolphins D/ST', position='DST', projection=7.2, can_add_now=True)",
+      "Player(name='Chiefs D/ST', position='DST', projection=6.0, status='NORMAL', is_starter=False)",
+      1.2000000000000002
+    ],
+    [
+      "FreeAgent(name='Jake Bates', position='K', projection=8.0, can_add_now=True)",
+      "Player(name='Cairo Santos', position='K', projection=6.9, status='ACTIVE', is_starter=True)",
+      1.0999999999999996
+    ],
+    [
+      "FreeAgent(name='Jake Elliott', position='K', projection=7.9, can_add_now=True)",
+      "Player(name='Cairo Santos', position='K', projection=6.9, status='ACTIVE', is_starter=True)",
+      1.0
+    ],
+    [
+      "FreeAgent(name='Wil Lutz', position='K', projection=7.8, can_add_now=True)",
+      "Player(name='Cairo Santos', position='K', projection=6.9, status='ACTIVE', is_starter=True)",
+      0.8999999999999995
+    ],
+    [
+      "FreeAgent(name='Cam Little', position='K', projection=7.7, can_add_now=True)",
+      "Player(name='Cairo Santos', position='K', projection=6.9, status='ACTIVE', is_starter=True)",
+      0.7999999999999998
+    ],
+    [
+      "FreeAgent(name='Harrison Mevis', position='K', projection=7.7, can_add_now=True)",
+      "Player(name='Cairo Santos', position='K', projection=6.9, status='ACTIVE', is_starter=True)",
+      0.7999999999999998
+    ],
+    [
+      "FreeAgent(name='Tre Tucker', position='WR', projection=6.3, can_add_now=True)",
+      "Player(name='Jacory Croskey-Merritt', position='RB', projection=5.6, status='ACTIVE', is_starter=False)",
+      0.7000000000000002
+    ]
+  ],
+  "fa_starter_waiver": [],
+  "fa_bench_immediate": [
+    [
+      "FreeAgent(name='Tony Pollard', position='RB', projection=7.2, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      7.2
+    ],
+    [
+      "FreeAgent(name='Tre Tucker', position='WR', projection=6.3, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      6.3
+    ],
+    [
+      "FreeAgent(name='Harold Fannin Jr.', position='TE', projection=5.4, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      5.4
+    ],
+    [
+      "FreeAgent(name='Chimere Dike', position='WR', projection=5.4, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      5.4
+    ],
+    [
+      "FreeAgent(name='Darius Slayton', position='WR', projection=5.2, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      5.2
+    ],
+    [
+      "FreeAgent(name='Josh Downs', position='WR', projection=5.1, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      5.1
+    ],
+    [
+      "FreeAgent(name='Colston Loveland', position='TE', projection=4.8, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      4.8
+    ],
+    [
+      "FreeAgent(name='Darren Waller', position='TE', projection=4.6, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      4.6
+    ],
+    [
+      "FreeAgent(name='Malik Washington', position='WR', projection=4.6, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      4.6
+    ],
+    [
+      "FreeAgent(name='Mason Taylor', position='TE', projection=4.3, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      4.3
+    ],
+    [
+      "FreeAgent(name='Evan Engram', position='TE', projection=4.1, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      4.1
+    ],
+    [
+      "FreeAgent(name='Calvin Austin III', position='WR', projection=4.1, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      4.1
+    ],
+    [
+      "FreeAgent(name='Jonnu Smith', position='TE', projection=3.4, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      3.4
+    ],
+    [
+      "FreeAgent(name='Tank Bigsby', position='RB', projection=2.2, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      2.2
+    ],
+    [
+      "FreeAgent(name='Jerome Ford', position='RB', projection=1.8, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      1.8
+    ],
+    [
+      "FreeAgent(name='Keon Coleman', position='WR', projection=1.4, can_add_now=True)",
+      "Player(name='Alvin Kamara', position='RB', projection=0.0, status='OUT', is_starter=False)",
+      1.4
+    ],
+    [
+      "FreeAgent(name='Dolphins D/ST', position='DST', projection=7.2, can_add_now=True)",
+      "Player(name='Chiefs D/ST', position='DST', projection=6.0, status='NORMAL', is_starter=False)",
+      1.2000000000000002
+    ]
+  ],
+  "fa_bench_waiver": [],
+  "total_expected_points": 85.1,
+  "team_key": "b00bs_b00bs_b00bs"
+}

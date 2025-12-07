@@ -1,0 +1,53 @@
+{
+  "starters_assignments": [
+    "Assignment(slot=Slot(name='QB', eligible_positions=['QB']), player=Player(name='Jordan Love', position='QB', projection=16.2, status='ACTIVE', is_starter=False))",
+    "Assignment(slot=Slot(name='RB1', eligible_positions=['RB']), player=Player(name='Aaron Jones Sr.', position='RB', projection=8.4, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='RB2', eligible_positions=['RB']), player=Player(name='Tyler Allgeier', position='RB', projection=6.2, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='WR1', eligible_positions=['WR']), player=Player(name='Amon-Ra St. Brown', position='WR', projection=12.6, status='QUESTIONABLE', is_starter=True))",
+    "Assignment(slot=Slot(name='WR2', eligible_positions=['WR']), player=Player(name='Chris Olave', position='WR', projection=9.2, status='QUESTIONABLE', is_starter=True))",
+    "Assignment(slot=Slot(name='TE', eligible_positions=['TE']), player=Player(name='Trey McBride', position='TE', projection=10.1, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='FLEX', eligible_positions=['RB', 'WR', 'TE']), player=Player(name='Xavier Worthy', position='WR', projection=7.0, status='ACTIVE', is_starter=True))",
+    "Assignment(slot=Slot(name='DST', eligible_positions=['DST']), player=Player(name='Seahawks D/ST', position='DST', projection=8.9, status='NORMAL', is_starter=False))",
+    "Assignment(slot=Slot(name='K', eligible_positions=['K']), player=Player(name='Matt Prater', position='K', projection=7.7, status='ACTIVE', is_starter=True))"
+  ],
+  "bench": [
+    "Player(name='Chuba Hubbard', position='RB', projection=4.2, status='ACTIVE', is_starter=False)",
+    "Player(name='Cooper Kupp', position='WR', projection=5.6, status='ACTIVE', is_starter=False)",
+    "Player(name='Evan McPherson', position='K', projection=7.3, status='ACTIVE', is_starter=False)",
+    "Player(name='Sam Darnold', position='QB', projection=16.1, status='ACTIVE', is_starter=True)",
+    "Player(name='49ers D/ST', position='DST', projection=6.7, status='NORMAL', is_starter=True)",
+    "Player(name='Cade Otton', position='TE', projection=5.3, status='ACTIVE', is_starter=False)"
+  ],
+  "stash": [
+    "Player(name='Darren Waller', position='TE', projection=4.6, status='IR', is_starter=False)"
+  ],
+  "bench_swaps": [
+    [
+      "Player(name='Seahawks D/ST', position='DST', projection=8.9, status='NORMAL', is_starter=False)",
+      "Player(name='49ers D/ST', position='DST', projection=6.7, status='NORMAL', is_starter=True)",
+      2.2
+    ]
+  ],
+  "fa_starter_immediate": [],
+  "fa_starter_waiver": [],
+  "fa_bench_immediate": [
+    [
+      "FreeAgent(name='Bhayshul Tuten', position='RB', projection=6.2, can_add_now=True)",
+      "Player(name='Chuba Hubbard', position='RB', projection=4.2, status='ACTIVE', is_starter=False)",
+      2.0
+    ],
+    [
+      "FreeAgent(name='Jordan Mason', position='RB', projection=5.4, can_add_now=True)",
+      "Player(name='Chuba Hubbard', position='RB', projection=4.2, status='ACTIVE', is_starter=False)",
+      1.2000000000000002
+    ],
+    [
+      "FreeAgent(name='Tez Johnson', position='WR', projection=5.3, can_add_now=True)",
+      "Player(name='Chuba Hubbard', position='RB', projection=4.2, status='ACTIVE', is_starter=False)",
+      1.0999999999999996
+    ]
+  ],
+  "fa_bench_waiver": [],
+  "total_expected_points": 86.3,
+  "team_key": "stinky_steinerts"
+}

@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LineupIQ – Weekly Lineup Helper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050816;
+      --bg-elevated: #111827;
+      --bg-soft: #020617;
+      --border-subtle: #1f2937;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.15);
+      --accent-strong: #0ea5e9;
+      --text: #e5e7eb;
+      --text-muted: #9ca3af;
+      --danger: #f97373;
+      --success: #4ade80;
+      --warning: #facc15;
+      --chip-bg: #111827;
+      --chip-muted: #374151;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.65);
+      --shadow-subtle: 0 10px 30px rgba(15, 23, 42, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Inter", sans-serif;
+      background: radial-gradient(circle at top left, #0f172a, #020617);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 18px 40px;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .app-title {
+      font-size: 22px;
+      font-weight: 650;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      border-radius: var(--radius-pill);
+      padding: 4px 11px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(55, 65, 81, 0.7);
+      color: var(--text-muted);
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .select {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(55, 65, 81, 0.85);
+      background: rgba(15, 23, 42, 0.85);
+      padding: 6px 12px;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .select label {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.09em;
+    }
+
+    select {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+      padding-right: 4px;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.5fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 880px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #111827, #020617);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 16px 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .metric-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .metric {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.8);
+    }
+
+    .metric-label {
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .metric-value {
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .metric-value.gain {
+      color: var(--success);
+    }
+
+    .table-scroll {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    th,
+    td {
+      padding: 5px 4px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    tr:nth-child(even) td {
+      background: rgba(15, 23, 42, 0.65);
+    }
+
+    tr:nth-child(odd) td {
+      background: rgba(15, 23, 42, 0.3);
+    }
+
+    tr td:first-child,
+    tr th:first-child {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+    }
+
+    tr td:last-child,
+    tr th:last-child {
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+
+    .subtle {
+      color: var(--text-muted);
+    }
+
+    .status-chip {
+      border-radius: var(--radius-pill);
+      padding: 2px 7px;
+      font-size: 11px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: var(--chip-bg);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+    }
+
+    .status-bad {
+      border-color: rgba(248, 113, 113, 0.9);
+      color: var(--danger);
+    }
+
+    .status-warn {
+      border-color: rgba(250, 204, 21, 0.9);
+      color: var(--warning);
+    }
+
+    .badge {
+      border-radius: var(--radius-pill);
+      padding: 2px 7px;
+      font-size: 11px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: var(--chip-bg);
+      color: var(--text-muted);
+    }
+
+    .badge-good {
+      border-color: rgba(74, 222, 128, 0.9);
+      color: var(--success);
+    }
+
+    .badge-pill-strong {
+      border-radius: var(--radius-pill);
+      background: var(--accent-soft);
+      border: 1px solid rgba(56, 189, 248, 0.9);
+      color: var(--accent-strong);
+      padding: 3px 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+    }
+
+    .section-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--text-muted);
+      margin: 8px 0 4px;
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="app-title">
+        LineupIQ
+        <span class="pill">Read-only • Local Dev</span>
+      </div>
+      <div class="controls-row">
+        <div class="select">
+          <label for="team-select">Team</label>
+          <select id="team-select"></select>
+        </div>
+        <button id="manage-teams-btn" style="
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            background: rgba(15, 23, 42, 0.9);
+            color: #9ca3af;
+            font-size: 11px;
+            padding: 4px 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            cursor: pointer;
+          ">
+          Manage teams
+        </button>
+        <div class="metric">
+          <span class="metric-label">Week</span>
+          <span class="metric-value" id="week-label">—</span>
+        </div>
+      </div>
+    </header>
+
+    <div id="login-panel" style="
+        display:none;
+        margin: 8px 0 14px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(55, 65, 81, 0.9);
+        background: rgba(15, 23, 42, 0.9);
+        box-shadow: var(--shadow-subtle);
+        font-size: 12px;
+      ">
+      <div style="margin-bottom:6px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.09em;">
+        Sign in to LineupIQ
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+        <input id="login-email" type="email" placeholder="Email" style="
+            flex: 1 1 180px;
+            min-width: 0;
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text);
+            padding: 4px 10px;
+            font-size: 12px;
+          " />
+        <input id="login-password" type="password" placeholder="Password" style="
+            flex: 1 1 140px;
+            min-width: 0;
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text);
+            padding: 4px 10px;
+            font-size: 12px;
+          " />
+        <button id="login-btn" style="
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.9);
+            background: var(--accent-soft);
+            color: var(--accent-strong);
+            font-size: 11px;
+            padding: 4px 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            cursor: pointer;
+          ">
+          Log in
+        </button>
+      </div>
+      <div id="login-error" class="error" style="margin-top:4px; display:none;"></div>
+    </div>
+
+    <div id="teams-panel" style="
+        display:none;
+        margin: 0 0 14px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(55, 65, 81, 0.9);
+        background: rgba(15, 23, 42, 0.95);
+        box-shadow: var(--shadow-subtle);
+        font-size: 12px;
+      ">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <div style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.09em;">
+          Manage teams
+        </div>
+        <button id="teams-panel-close" style="
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            background: transparent;
+            color: #9ca3af;
+            font-size: 10px;
+            padding: 2px 8px;
+            cursor: pointer;
+          ">
+          Close
+        </button>
+      </div>
+      <div id="teams-panel-body" style="max-height: 160px; overflow-y:auto;"></div>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+        <button id="teams-panel-save" style="
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.9);
+            background: var(--accent-soft);
+            color: var(--accent-strong);
+            font-size: 11px;
+            padding: 4px 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            cursor: pointer;
+          ">
+          Save
+        </button>
+      </div>
+      <div id="teams-panel-error" class="error" style="margin-top:4px; display:none;"></div>
+    </div>
+
+    <div id="espn-link-panel" style="
+        display:none;
+        margin: 0 0 14px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(55, 65, 81, 0.9);
+        background: rgba(15, 23, 42, 0.9);
+        box-shadow: var(--shadow-subtle);
+        font-size: 12px;
+      ">
+      <div style="margin-bottom:6px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.09em;">
+        Link ESPN account
+      </div>
+      <div style="margin-bottom:4px;" class="subtle">
+        Paste your <code>espn_s2</code> and <code>SWID</code> cookies once. They will be stored securely
+        for this LineupIQ user and reused for all requests.
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:4px;">
+        <input id="espn-s2-input" type="text" placeholder="espn_s2" style="
+            flex: 1 1 220px;
+            min-width: 0;
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text);
+            padding: 4px 10px;
+            font-size: 12px;
+          " />
+        <input id="espn-swid-input" type="text" placeholder="SWID" style="
+            flex: 1 1 160px;
+            min-width: 0;
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text);
+            padding: 4px 10px;
+            font-size: 12px;
+          " />
+        <button id="espn-link-btn" style="
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.9);
+            background: var(--accent-soft);
+            color: var(--accent-strong);
+            font-size: 11px;
+            padding: 4px 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            cursor: pointer;
+          ">
+          Link ESPN
+        </button>
+      </div>
+      <div id="espn-link-error" class="error" style="margin-top:4px; display:none;"></div>
+    </div>
+
+    <main>
+      <section class="card" id="lineup-card">
+        <div class="card-header">
+          <div class="card-title">Current lineup</div>
+          <div class="metric-row">
+            <div class="metric">
+              <span class="metric-label">ESPN starters</span>
+              <span class="metric-value" id="current-total">—</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Optimized</span>
+              <span class="metric-value gain" id="optimized-total">—</span>
+            </div>
+            <div class="metric" id="gain-chip" style="display:none;">
+              <span class="metric-label">Gain</span>
+              <span class="metric-value gain" id="gain-points">+0.0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Starters</div>
+        <div id="starters-table"></div>
+
+        <div class="section-label">Bench</div>
+        <div id="bench-table"></div>
+
+        <div class="section-label">Stash (injured / bye / 0-proj)</div>
+        <div id="stash-table"></div>
+
+        <div class="error" id="state-error" style="display:none;"></div>
+      </section>
+
+      <section class="card" id="actions-card">
+        <div class="card-header">
+          <div class="card-title">Decisions</div>
+          <div class="metric-row">
+            <div class="badge-pill-strong" id="plan-summary">No plan loaded</div>
+            <div style="display:flex; gap:6px; align-items:center; overflow-x:auto; max-width:100%; padding-bottom:2px;">
+              <button id="tab-actions" style="
+                  border-radius: 999px;
+                  border: 1px solid rgba(75, 85, 99, 0.95);
+                  background: rgba(15, 23, 42, 0.95);
+                  color: #e5e7eb;
+                  font-size: 11px;
+                  padding: 4px 10px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.09em;
+                  cursor: pointer;
+                ">
+                Actions
+              </button>
+              <button id="tab-fa" style="
+                  border-radius: 999px;
+                  border: 1px solid rgba(31, 41, 55, 0.95);
+                  background: transparent;
+                  color: #9ca3af;
+                  font-size: 11px;
+                  padding: 4px 10px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.09em;
+                  cursor: pointer;
+                ">
+                Free agents
+              </button>
+              <button id="tab-waivers" style="
+                  border-radius: 999px;
+                  border: 1px solid rgba(31, 41, 55, 0.95);
+                  background: transparent;
+                  color: #9ca3af;
+                  font-size: 11px;
+                  padding: 4px 10px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.09em;
+                  cursor: pointer;
+                ">
+                Waiver plan
+              </button>
+              <button id="autopilot-btn" style="
+                  border-radius: 999px;
+                  border: 1px solid rgba(56, 189, 248, 0.5);
+                  background: rgba(15, 23, 42, 0.9);
+                  color: #e5e7eb;
+                  font-size: 11px;
+                  padding: 4px 10px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.09em;
+                  cursor: pointer;
+                  opacity: 0.9;
+                ">
+                Autopilot swaps
+              </button>
+              <div id="mode-toggle" style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 4px;
+                  margin-left: 8px;
+                  font-size: 11px;
+                  color: #9ca3af;
+                ">
+                <span style="text-transform: uppercase; letter-spacing: 0.09em;">Mode:</span>
+                <button id="mode-dryrun-btn" style="
+                    border-radius: 999px;
+                    border: 1px solid rgba(75, 85, 99, 0.9);
+                    background: rgba(15, 23, 42, 0.95);
+                    color: #e5e7eb;
+                    font-size: 10px;
+                    padding: 3px 8px;
+                    cursor: pointer;
+                  ">
+                  Dry run
+                </button>
+                <button id="mode-live-btn" style="
+                    border-radius: 999px;
+                    border: 1px solid rgba(31, 41, 55, 0.95);
+                    background: transparent;
+                    color: #9ca3af;
+                    font-size: 10px;
+                    padding: 3px 8px;
+                    cursor: pointer;
+                  ">
+                  Live
+                </button>
+              </div>
+              <button id="apply-selected-btn" style="
+                  border-radius: 999px;
+                  border: 1px solid rgba(56, 189, 248, 0.9);
+                  background: rgba(15, 23, 42, 0.95);
+                  color: #e5e7eb;
+                  font-size: 11px;
+                  padding: 4px 12px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.09em;
+                  cursor: pointer;
+                  opacity: 0.7;
+                " disabled>
+                Apply selected
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="actions-view">
+          <div id="actions-table"></div>
+          <div class="subtle" id="apply-result" style="margin-top:6px; display:none;"></div>
+        </div>
+        <div id="fa-view" style="display:none;">
+          <div id="fa-table"></div>
+        </div>
+        <div id="waiver-view" style="display:none;">
+          <div id="waiver-table"></div>
+        </div>
+
+        <div class="section-label" id="top-actions-label">Top FA options (all teams)</div>
+        <div id="top-actions-table"></div>
+        <div class="error" id="plan-error" style="display:none;"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Use same-origin API by default so the UI can be served by FastAPI on "/".
+    const API_BASE = "";
+
+    const teamSelect = document.getElementById("team-select");
+    const weekLabel = document.getElementById("week-label");
+
+    const loginPanel = document.getElementById("login-panel");
+    const loginEmailInput = document.getElementById("login-email");
+    const loginPasswordInput = document.getElementById("login-password");
+    const loginButton = document.getElementById("login-btn");
+    const loginError = document.getElementById("login-error");
+    const manageTeamsBtn = document.getElementById("manage-teams-btn");
+    const teamsPanel = document.getElementById("teams-panel");
+    const teamsPanelBody = document.getElementById("teams-panel-body");
+    const teamsPanelClose = document.getElementById("teams-panel-close");
+    const teamsPanelSave = document.getElementById("teams-panel-save");
+    const teamsPanelError = document.getElementById("teams-panel-error");
+
+    const espnLinkPanel = document.getElementById("espn-link-panel");
+    const espnS2Input = document.getElementById("espn-s2-input");
+    const espnSwidInput = document.getElementById("espn-swid-input");
+    const espnLinkBtn = document.getElementById("espn-link-btn");
+    const espnLinkError = document.getElementById("espn-link-error");
+
+    const startersTable = document.getElementById("starters-table");
+    const benchTable = document.getElementById("bench-table");
+    const stashTable = document.getElementById("stash-table");
+    const stateError = document.getElementById("state-error");
+
+    const actionsTable = document.getElementById("actions-table");
+    const topActionsTable = document.getElementById("top-actions-table");
+    const planError = document.getElementById("plan-error");
+    const planSummary = document.getElementById("plan-summary");
+    const tabActions = document.getElementById("tab-actions");
+    const tabFa = document.getElementById("tab-fa");
+    const tabWaivers = document.getElementById("tab-waivers");
+    const actionsView = document.getElementById("actions-view");
+    const faView = document.getElementById("fa-view");
+    const waiverView = document.getElementById("waiver-view");
+    const faTable = document.getElementById("fa-table");
+    const waiverTable = document.getElementById("waiver-table");
+    const autopilotBtn = document.getElementById("autopilot-btn");
+    const applySelectedBtn = document.getElementById("apply-selected-btn");
+    const modeDryRunBtn = document.getElementById("mode-dryrun-btn");
+    const modeLiveBtn = document.getElementById("mode-live-btn");
+    const applyResult = document.getElementById("apply-result");
+
+    const currentTotalEl = document.getElementById("current-total");
+    const optimizedTotalEl = document.getElementById("optimized-total");
+    const gainChip = document.getElementById("gain-chip");
+    const gainPoints = document.getElementById("gain-points");
+
+    function statusClass(status) {
+      if (!status) return "";
+      const s = status.toUpperCase();
+      if (["O", "OUT", "IR", "INJURY_RESERVE"].includes(s)) return "status-chip status-bad";
+      if (["D", "DOUBTFUL", "BYE"].includes(s)) return "status-chip status-warn";
+      return "status-chip";
+    }
+
+    function fmtProj(x) {
+      if (x === null || x === undefined) return "—";
+      return Number(x).toFixed(1);
+    }
+
+    const SLOT_ORDER = {
+      QB: 0,
+      QB1: 0,
+      RB: 1,
+      RB1: 1,
+      RB2: 2,
+      WR: 3,
+      WR1: 3,
+      WR2: 4,
+      TE: 5,
+      FLEX: 6,
+      "D/ST": 7,
+      DST: 7,
+      K: 8,
+    };
+
+    const POS_ORDER = {
+      QB: 0,
+      RB: 1,
+      WR: 2,
+      TE: 3,
+      DST: 4,
+      "D/ST": 4,
+      K: 5,
+    };
+
+    function sortStarters(starters) {
+      return [...(starters || [])].sort((a, b) => {
+        const sa = String(a.slot || a.position || "");
+        const sb = String(b.slot || b.position || "");
+        const oa = SLOT_ORDER[sa] ?? 99;
+        const ob = SLOT_ORDER[sb] ?? 99;
+        if (oa !== ob) return oa - ob;
+        return sa.localeCompare(sb);
+      });
+    }
+
+    function sortBench(players) {
+      return [...(players || [])].sort((a, b) => {
+        const pa = String(a.position || "");
+        const pb = String(b.position || "");
+        const oa = POS_ORDER[pa] ?? 99;
+        const ob = POS_ORDER[pb] ?? 99;
+        if (oa !== ob) return oa - ob;
+        return (a.name || "").localeCompare(b.name || "");
+      });
+    }
+
+    function renderPlayersTable(players, { showSlot = false } = {}) {
+      if (!players || players.length === 0) {
+        return '<div class="subtle">No players.</div>';
+      }
+
+      const headers = [
+        showSlot ? "Slot" : "Pos",
+        "Player",
+        "Proj",
+        "Status",
+      ];
+
+      const rows = players
+        .map((p) => {
+          const slot = (p.slot || p.position || "").toString();
+          const name = p.name || "UNKNOWN";
+          const pos = p.position || "UNK";
+          const proj = fmtProj(p.projection);
+          const status = p.status || "—";
+          return `
+          <tr>
+            <td>${showSlot ? slot : pos}</td>
+            <td>${name}</td>
+            <td>${proj}</td>
+            <td><span class="${statusClass(status)}">${status}</span></td>
+          </tr>`;
+        })
+        .join("");
+
+      return `
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              ${headers.map((h) => `<th>${h}</th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </div>`;
+    }
+
+    let currentTeamKey = null;
+    let currentTeamPlanActions = [];
+    let currentWaiverPlan = null;
+    const selectedActionIds = new Set();
+
+    // Execution mode: 'dry_run' (safe) or 'http' (live writes to ESPN).
+    // Default to dry_run so you have to explicitly opt into live mode.
+    let actionMode = "dry_run";
+
+    function updateModeButtons() {
+      if (!modeDryRunBtn || !modeLiveBtn) return;
+      const activeStyle = {
+        borderColor: "rgba(56, 189, 248, 0.9)",
+        background: "rgba(15, 23, 42, 0.95)",
+        color: "#e5e7eb",
+      };
+      const inactiveStyle = {
+        borderColor: "rgba(31, 41, 55, 0.95)",
+        background: "transparent",
+        color: "#9ca3af",
+      };
+
+      const applyStyles = (el, styles) => {
+        Object.entries(styles).forEach(([k, v]) => {
+          el.style[k] = v;
+        });
+      };
+
+      if (actionMode === "dry_run") {
+        applyStyles(modeDryRunBtn, activeStyle);
+        applyStyles(modeLiveBtn, inactiveStyle);
+      } else {
+        applyStyles(modeDryRunBtn, inactiveStyle);
+        applyStyles(modeLiveBtn, activeStyle);
+      }
+    }
+
+    function renderActionsTable(actions, { selectable = false } = {}) {
+      if (!actions || actions.length === 0) {
+        return '<div class="subtle">No clear upgrades this week.</div>';
+      }
+
+      const rows = actions
+        .map((a) => {
+          const typeLabel =
+            a.type === "bench_to_start"
+              ? "Bench → Start"
+              : a.type === "fa_for_starter"
+              ? "FA → Starter"
+              : "FA → Bench";
+
+          const canAdd = a.can_add_now
+            ? '<span class="badge badge-good">Add Now</span>'
+            : '<span class="badge">Waiver</span>';
+
+          const addProj =
+            a && typeof a.add_projection === "number"
+              ? fmtProj(a.add_projection)
+              : "—";
+          const dropProj =
+            a && typeof a.drop_projection === "number"
+              ? fmtProj(a.drop_projection)
+              : "—";
+
+          return `
+        <tr>
+          ${
+            selectable
+              ? `<td><input type="checkbox" class="action-select" data-action-id="${a.id}"></td>`
+              : ""
+          }
+          <td>${typeLabel}</td>
+          <td>${a.add_name} <span class="subtle">(${a.add_position} • ${addProj} pts)</span></td>
+          <td>${a.drop_name} <span class="subtle">(${a.drop_position} • ${dropProj} pts)</span></td>
+          <td>+${a.gain.toFixed(1)}</td>
+          <td>${canAdd}</td>
+        </tr>`;
+        })
+        .join("");
+
+      const headerCells = [
+        selectable ? "<th></th>" : "",
+        "<th>Type</th>",
+        "<th>Add</th>",
+        "<th>Drop / Sit</th>",
+        "<th>Gain</th>",
+        "<th>Avail</th>",
+      ].join("");
+
+      return `
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              ${headerCells}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </div>`;
+    }
+
+    function renderWaiverTable(plan) {
+      const options = (plan && plan.options) || [];
+      if (!options.length) {
+        return '<div class="subtle">No yellow-waiver upgrades identified for this team.</div>';
+      }
+
+      const rows = options
+        .map((o, idx) => {
+          const addProj = fmtProj(o.add_projection);
+          const dropProj = fmtProj(o.drop_projection);
+          return `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${o.add_name} <span class="subtle">(${o.add_position} • ${addProj} pts)</span></td>
+          <td>${o.drop_name} <span class="subtle">(${o.drop_position} • ${dropProj} pts)</span></td>
+          <td>+${o.gain.toFixed(1)}</td>
+        </tr>`;
+        })
+        .join("");
+
+      return `
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Add (waiver)</th>
+              <th>Drop</th>
+              <th>Gain</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </div>`;
+    }
+
+    function buildBenchActionMap(actions) {
+      const map = new Map();
+      for (const a of actions || []) {
+        if (a.type === "bench_to_start" && a.add_name) {
+          const key = a.add_name.toLowerCase();
+          const label = `Start over ${a.drop_name} (+${a.gain.toFixed(1)})`;
+          map.set(key, (map.get(key) || []).concat(label));
+        } else if (a.type === "fa_for_bench" && a.drop_name) {
+          const key = a.drop_name.toLowerCase();
+          const label = `Drop for ${a.add_name} (+${a.gain.toFixed(1)})`;
+          map.set(key, (map.get(key) || []).concat(label));
+        }
+      }
+      return map;
+    }
+
+    function renderFaTableForTeam(actions) {
+      const faMap = new Map();
+      for (const a of actions || []) {
+        if (a.type === "fa_for_starter" || a.type === "fa_for_bench") {
+          const key = `${a.add_name}::${a.add_position}`;
+          const existing = faMap.get(key);
+          if (!existing || a.gain > existing.gain) {
+            faMap.set(key, {
+              name: a.add_name,
+              position: a.add_position,
+              gain: a.gain,
+              can_add_now: a.can_add_now,
+              type: a.type,
+            });
+          }
+        }
+      }
+      const items = Array.from(faMap.values()).sort(
+        (a, b) => b.gain - a.gain
+      );
+      if (!items.length) {
+        return '<div class="subtle">No free agent upgrades identified for this team.</div>';
+      }
+
+      const rows = items
+        .map((fa) => {
+          const role =
+            fa.type === "fa_for_starter" ? "Starter" : "Bench";
+          const canAdd = fa.can_add_now
+            ? '<span class="badge badge-good">Add Now</span>'
+            : '<span class="badge">Waiver</span>';
+          return `
+        <tr>
+          <td>${fa.name}</td>
+          <td>${fa.position}</td>
+          <td>${role}</td>
+          <td>+${fa.gain.toFixed(1)}</td>
+          <td>${canAdd}</td>
+        </tr>`;
+        })
+        .join("");
+
+      return `
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Pos</th>
+              <th>Role</th>
+              <th>Gain</th>
+              <th>Avail</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </div>`;
+    }
+
+    async function fetchJSON(path) {
+      const resp = await fetch(API_BASE + path);
+      if (!resp.ok) {
+        throw new Error(`HTTP ${resp.status}`);
+      }
+      return resp.json();
+    }
+
+    async function loadTeams() {
+      try {
+        const teams = await fetchJSON("/teams");
+        teamSelect.innerHTML = "";
+        for (const t of teams) {
+          const opt = document.createElement("option");
+          opt.value = t.key;
+          opt.textContent = t.team_name_keyword || t.key;
+          teamSelect.appendChild(opt);
+        }
+        if (teams.length > 0) {
+          await loadTeamStateAndPlan(teams[0].key);
+        }
+      } catch (err) {
+        console.error(err);
+        stateError.style.display = "block";
+        stateError.textContent =
+          "Failed to load teams from API. Make sure `uvicorn app:app --reload` is running.";
+      }
+    }
+
+    async function loadTopActions() {
+      try {
+        const data = await fetchJSON("/actions/top?limit=15");
+        const faOnly = (data || []).filter(
+          (a) => a.type === "fa_for_starter" || a.type === "fa_for_bench"
+        );
+        topActionsTable.innerHTML = renderActionsTable(faOnly);
+      } catch (err) {
+        console.error(err);
+        topActionsTable.innerHTML =
+          '<div class="subtle">Could not load top actions.</div>';
+      }
+    }
+
+    async function bootstrapApp() {
+      // Check if already authenticated.
+      try {
+        const resp = await fetch(API_BASE + "/auth/me");
+        if (resp.ok) {
+          if (loginPanel) loginPanel.style.display = "none";
+          // Now check ESPN link status.
+          try {
+            const statusResp = await fetch(API_BASE + "/auth/espn_status");
+            if (statusResp.ok) {
+              const status = await statusResp.json();
+              if (status.linked) {
+                if (espnLinkPanel) espnLinkPanel.style.display = "none";
+                await loadTeams();
+                await loadTopActions();
+                return;
+              }
+            }
+          } catch (err) {
+            console.error(err);
+          }
+          // Not linked or status check failed – show ESPN link panel.
+          if (espnLinkPanel) espnLinkPanel.style.display = "block";
+          return;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+      // Not authenticated or /auth/me failed.
+      if (loginPanel) loginPanel.style.display = "block";
+    }
+
+    async function loadUserTeamsForPanel() {
+      if (!teamsPanelBody) return;
+      teamsPanelError.style.display = "none";
+      teamsPanelError.textContent = "";
+      teamsPanelBody.innerHTML = '<div class="subtle">Loading teams…</div>';
+      try {
+        const teams = await fetchJSON("/me/teams");
+        if (!teams.length) {
+          teamsPanelBody.innerHTML =
+            '<div class="subtle">No configured teams found in the backend.</div>';
+          return;
+        }
+        const rows = teams
+          .map((t) => {
+            const checked = t.enabled ? "checked" : "";
+            return `
+          <label style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+            <input type="checkbox" data-team-key="${t.key}" ${checked} />
+            <span>${t.team_name_keyword || t.key} <span class="subtle">(League ${t.league_id})</span></span>
+          </label>`;
+          })
+          .join("");
+        teamsPanelBody.innerHTML = rows;
+      } catch (err) {
+        console.error(err);
+        teamsPanelBody.innerHTML =
+          '<div class="subtle">Failed to load team configuration.</div>';
+      }
+    }
+
+    function updateApplyButtonState() {
+      if (!applySelectedBtn) return;
+      const count = selectedActionIds.size;
+      applySelectedBtn.disabled = !currentTeamKey || count === 0;
+      applySelectedBtn.style.opacity = applySelectedBtn.disabled ? 0.6 : 1;
+      applySelectedBtn.textContent =
+        count > 0 ? `Apply selected (${count})` : "Apply selected";
+    }
+
+    async function loadTeamStateAndPlan(teamKey) {
+      stateError.style.display = "none";
+      planError.style.display = "none";
+      applyResult.style.display = "none";
+      applyResult.textContent = "";
+      currentTeamKey = teamKey;
+      selectedActionIds.clear();
+      updateApplyButtonState();
+
+      try {
+        const [state, plan, health] = await Promise.all([
+          fetchJSON(`/teams/${teamKey}/state`),
+          fetchJSON(`/teams/${teamKey}/plan`),
+          fetchJSON("/health"),
+        ]);
+
+        weekLabel.textContent = health.week ?? "—";
+
+        // Lineup view
+        startersTable.innerHTML = renderPlayersTable(
+          sortStarters(state.starters),
+          { showSlot: true }
+        );
+
+        currentTeamPlanActions = plan.actions || [];
+        currentWaiverPlan = null;
+        const benchActionMap = buildBenchActionMap(currentTeamPlanActions);
+
+        benchTable.innerHTML = renderPlayersTable(
+          sortBench(
+            state.bench.map((p) => {
+            const key = (p.name || "").toLowerCase();
+            const labels = benchActionMap.get(key) || [];
+            return {
+              ...p,
+              action_summary:
+                labels.length === 0
+                  ? "—"
+                  : labels.length === 1
+                  ? labels[0]
+                  : `${labels[0]} (+${labels.length - 1} more)`,
+            };
+          })
+          ),
+          { showSlot: false }
+        );
+        stashTable.innerHTML = renderPlayersTable(state.stash);
+
+        currentTotalEl.textContent = state.total_projection.toFixed(1);
+        optimizedTotalEl.textContent =
+          plan.total_projection_optimized.toFixed(1);
+        const gain = plan.total_projection_optimized - state.total_projection;
+        if (gain > 0.1) {
+          gainChip.style.display = "inline-flex";
+          gainPoints.textContent = `+${gain.toFixed(1)}`;
+        } else {
+          gainChip.style.display = "none";
+        }
+
+        // Plan view: show bench_to_start and FA->starter here; keep FA->bench
+        // in the "Free agents" view.
+        const decisionActions = (plan.actions || []).filter(
+          (a) =>
+            a.type === "bench_to_start" ||
+            a.type === "fa_for_starter"
+        );
+
+        actionsTable.innerHTML = renderActionsTable(decisionActions, {
+          selectable: true,
+        });
+
+        // Wire up checkboxes for this team/plan
+        actionsTable
+          .querySelectorAll(".action-select")
+          .forEach((checkbox) => {
+            checkbox.addEventListener("change", (event) => {
+              const id = event.target.dataset.actionId;
+              if (!id) return;
+              if (event.target.checked) {
+                selectedActionIds.add(id);
+              } else {
+                selectedActionIds.delete(id);
+              }
+              updateApplyButtonState();
+            });
+          });
+        if (decisionActions.length) {
+          const best = decisionActions[0];
+          planSummary.textContent = `${decisionActions.length} actions • best +${best.gain.toFixed(
+            1
+          )} pts`;
+        } else {
+          planSummary.textContent = "No clear upgrades for this team";
+        }
+      } catch (err) {
+        console.error(err);
+        stateError.style.display = "block";
+        stateError.textContent =
+          "Failed to load state/plan. Confirm the API server is running and config is valid.";
+      }
+    }
+
+    async function loadWaiverPlan(teamKey) {
+      try {
+        const plan = await fetchJSON(`/teams/${teamKey}/waiver_plan`);
+        currentWaiverPlan = plan;
+        waiverTable.innerHTML = renderWaiverTable(plan);
+      } catch (err) {
+        console.error(err);
+        waiverTable.innerHTML =
+          '<div class="subtle">Could not load waiver plan for this team.</div>';
+      }
+    }
+
+    async function applySelectedActions() {
+      if (!currentTeamKey || selectedActionIds.size === 0) {
+        return;
+      }
+
+      planError.style.display = "none";
+      applyResult.style.display = "none";
+      applyResult.textContent = "";
+
+      try {
+        const resp = await fetch(`${API_BASE}/teams/${currentTeamKey}/actions/apply?mode=${encodeURIComponent(
+          actionMode
+        )}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action_ids: Array.from(selectedActionIds),
+          }),
+        });
+
+        if (!resp.ok) {
+          throw new Error(`HTTP ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        const applied = data.applied || [];
+        const unknown = data.unknown_action_ids || [];
+        const execution = data.execution || [];
+
+        const successes = execution.filter((e) => e && e.success);
+        const failures = execution.filter((e) => e && e.success === false);
+
+        applyResult.style.display = "block";
+
+        let summary = "";
+        if (execution.length > 0 && successes.length > 0) {
+          // Real execution path (http/browser modes)
+          const bestGain =
+            applied[0] && typeof applied[0].gain === "number"
+              ? applied[0].gain.toFixed(1)
+              : "0.0";
+          summary = `Applied ${successes.length} action${
+            successes.length === 1 ? "" : "s"
+          } (best +${bestGain} pts).`;
+          if (failures.length > 0) {
+            summary += ` ${failures.length} action${
+              failures.length === 1 ? " was" : "s were"
+            } not applied.`;
+          }
+        } else {
+          // Dry-run mode (no execution or all success=false + mode="dry_run")
+          if (applied.length === 0) {
+            summary =
+              "Dry run: no matching actions to apply (plan may have changed).";
+          } else {
+            const bestGain =
+              applied[0] && typeof applied[0].gain === "number"
+                ? applied[0].gain.toFixed(1)
+                : "0.0";
+            summary = `Dry run: would apply ${applied.length} action${
+              applied.length === 1 ? "" : "s"
+            } (best +${bestGain} pts). No changes have been sent to ESPN.`;
+          }
+        }
+
+        if (unknown.length > 0) {
+          summary += ` ${unknown.length} selected action id${
+            unknown.length === 1 ? " was" : "s were"
+          } stale or missing.`;
+        }
+
+        let details = "";
+        if (execution.length > 0) {
+          const lines = execution
+            .filter((e) => e && typeof e.message === "string")
+            .map((e) => {
+              const status = e.success ? "Success" : "Failed";
+              const type = e.type || "action";
+              const msg = e.message || "";
+              return `<li><strong>${status}</strong> (${type}): ${msg}</li>`;
+            });
+          if (lines.length) {
+            details = `<ul class="subtle" style="margin-top:4px;">${lines.join(
+              ""
+            )}</ul>`;
+          }
+        }
+
+        applyResult.innerHTML = `${summary}${details}`;
+
+        // After applying, refresh the team state/plan so the UI reflects the
+        // new lineup and updated recommendations.
+        await loadTeamStateAndPlan(currentTeamKey);
+      } catch (err) {
+        console.error(err);
+        planError.style.display = "block";
+        planError.textContent =
+          "Failed to apply actions (dry run). See console for details.";
+      }
+    }
+
+    async function runAutopilot() {
+      if (!currentTeamKey) return;
+
+      planError.style.display = "none";
+      applyResult.style.display = "none";
+      applyResult.textContent = "";
+
+      try {
+        const resp = await fetch(
+          `${API_BASE}/teams/${currentTeamKey}/autopilot?mode=${encodeURIComponent(
+            actionMode
+          )}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              min_gain: 0.5,
+            }),
+          }
+        );
+
+        if (!resp.ok) {
+          throw new Error(`HTTP ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        const applied = data.applied || [];
+        const execution = data.execution || [];
+        const successes = execution.filter((e) => e && e.success);
+        const failures = execution.filter((e) => e && e.success === false);
+
+        applyResult.style.display = "block";
+
+        let summary = "";
+        if (applied.length === 0) {
+          summary = "Autopilot: no bench→start swaps met the minimum gain.";
+        } else if (successes.length > 0) {
+          const bestGain =
+            applied[0] && typeof applied[0].gain === "number"
+              ? applied[0].gain.toFixed(1)
+              : "0.0";
+          summary = `Autopilot: applied ${successes.length} swap${
+            successes.length === 1 ? "" : "s"
+          } (best +${bestGain} pts).`;
+          if (failures.length > 0) {
+            summary += ` ${failures.length} swap${
+              failures.length === 1 ? " was" : "s were"
+            } not applied.`;
+          }
+        } else {
+          summary =
+            "Autopilot: attempted swaps but none were applied; see server logs for details.";
+        }
+
+        let details = "";
+        if (execution.length > 0) {
+          const lines = execution
+            .filter((e) => e && typeof e.message === "string")
+            .map((e) => {
+              const status = e.success ? "Success" : "Failed";
+              const type = e.type || "swap";
+              const msg = e.message || "";
+              return `<li><strong>${status}</strong> (${type}): ${msg}</li>`;
+            });
+          if (lines.length) {
+            details = `<ul class="subtle" style="margin-top:4px;">${lines.join(
+              ""
+            )}</ul>`;
+          }
+        }
+
+        applyResult.innerHTML = `${summary}${details}`;
+
+        await loadTeamStateAndPlan(currentTeamKey);
+      } catch (err) {
+        console.error(err);
+        planError.style.display = "block";
+        planError.textContent =
+          "Failed to run autopilot. See console for details.";
+      }
+    }
+
+    teamSelect.addEventListener("change", (e) => {
+      const key = e.target.value;
+      if (key) {
+        loadTeamStateAndPlan(key);
+      }
+    });
+
+    applySelectedBtn.addEventListener("click", () => {
+      applySelectedActions();
+    });
+
+    autopilotBtn.addEventListener("click", () => {
+      runAutopilot();
+    });
+
+    if (modeDryRunBtn && modeLiveBtn) {
+      modeDryRunBtn.addEventListener("click", () => {
+        actionMode = "dry_run";
+        updateModeButtons();
+      });
+      modeLiveBtn.addEventListener("click", () => {
+        actionMode = "http";
+        updateModeButtons();
+      });
+      // Initialize toggle styling
+      updateModeButtons();
+    }
+
+    tabActions.addEventListener("click", () => {
+      actionsView.style.display = "block";
+      faView.style.display = "none";
+      tabActions.style.background = "rgba(15, 23, 42, 0.95)";
+      tabActions.style.borderColor = "rgba(75, 85, 99, 0.95)";
+      tabActions.style.color = "#e5e7eb";
+      tabFa.style.background = "transparent";
+      tabFa.style.borderColor = "rgba(31, 41, 55, 0.95)";
+      tabFa.style.color = "#9ca3af";
+    });
+
+    tabFa.addEventListener("click", () => {
+      actionsView.style.display = "none";
+      faView.style.display = "block";
+      waiverView.style.display = "none";
+      faTable.innerHTML = renderFaTableForTeam(currentTeamPlanActions);
+      tabFa.style.background = "rgba(15, 23, 42, 0.95)";
+      tabFa.style.borderColor = "rgba(75, 85, 99, 0.95)";
+      tabFa.style.color = "#e5e7eb";
+      tabActions.style.background = "transparent";
+      tabActions.style.borderColor = "rgba(31, 41, 55, 0.95)";
+      tabActions.style.color = "#9ca3af";
+      if (tabWaivers) {
+        tabWaivers.style.background = "transparent";
+        tabWaivers.style.borderColor = "rgba(31, 41, 55, 0.95)";
+        tabWaivers.style.color = "#9ca3af";
+      }
+    });
+
+    if (tabWaivers) {
+      tabWaivers.addEventListener("click", () => {
+        actionsView.style.display = "none";
+        faView.style.display = "none";
+        waiverView.style.display = "block";
+        if (!currentWaiverPlan && currentTeamKey) {
+          loadWaiverPlan(currentTeamKey);
+        } else if (currentWaiverPlan) {
+          waiverTable.innerHTML = renderWaiverTable(currentWaiverPlan);
+        }
+        tabWaivers.style.background = "rgba(15, 23, 42, 0.95)";
+        tabWaivers.style.borderColor = "rgba(75, 85, 99, 0.95)";
+        tabWaivers.style.color = "#e5e7eb";
+        tabActions.style.background = "transparent";
+        tabActions.style.borderColor = "rgba(31, 41, 55, 0.95)";
+        tabActions.style.color = "#9ca3af";
+        tabFa.style.background = "transparent";
+        tabFa.style.borderColor = "rgba(31, 41, 55, 0.95)";
+        tabFa.style.color = "#9ca3af";
+      });
+    }
+
+    if (manageTeamsBtn && teamsPanel) {
+      manageTeamsBtn.addEventListener("click", async () => {
+        teamsPanel.style.display = "block";
+        await loadUserTeamsForPanel();
+      });
+    }
+
+    if (teamsPanelClose && teamsPanel) {
+      teamsPanelClose.addEventListener("click", () => {
+        teamsPanel.style.display = "none";
+      });
+    }
+
+    if (teamsPanelSave && teamsPanelBody) {
+      teamsPanelSave.addEventListener("click", async () => {
+        const checkboxes = teamsPanelBody.querySelectorAll(
+          "input[type=checkbox][data-team-key]"
+        );
+        const selectedKeys = [];
+        checkboxes.forEach((cb) => {
+          if (cb.checked) {
+            selectedKeys.push(cb.getAttribute("data-team-key"));
+          }
+        });
+        teamsPanelError.style.display = "none";
+        teamsPanelError.textContent = "";
+        try {
+          await fetch(API_BASE + "/me/teams", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ team_keys: selectedKeys }),
+          });
+          teamsPanel.style.display = "none";
+          // Reload teams so dropdown reflects new selection.
+          await loadTeams();
+          await loadTopActions();
+        } catch (err) {
+          console.error(err);
+          teamsPanelError.style.display = "block";
+          teamsPanelError.textContent =
+            "Failed to save team configuration. Please try again.";
+        }
+      });
+    }
+
+    // Initial load
+    if (loginButton) {
+      loginButton.addEventListener("click", async () => {
+        if (!loginEmailInput || !loginPasswordInput) return;
+        const email = loginEmailInput.value.trim();
+        const password = loginPasswordInput.value;
+        if (!email || !password) {
+          if (loginError) {
+            loginError.style.display = "block";
+            loginError.textContent = "Please enter email and password.";
+          }
+          return;
+        }
+        if (loginError) {
+          loginError.style.display = "none";
+          loginError.textContent = "";
+        }
+        try {
+          const resp = await fetch(API_BASE + "/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
+          if (!resp.ok) {
+            throw new Error(`HTTP ${resp.status}`);
+          }
+          // On success, hide login and load data.
+          if (loginPanel) loginPanel.style.display = "none";
+          // After login, check ESPN link status before loading data.
+          try {
+            const statusResp = await fetch(API_BASE + "/auth/espn_status");
+            if (statusResp.ok) {
+              const status = await statusResp.json();
+              if (status.linked) {
+                if (espnLinkPanel) espnLinkPanel.style.display = "none";
+                await loadTeams();
+                await loadTopActions();
+              } else if (espnLinkPanel) {
+                espnLinkPanel.style.display = "block";
+              }
+            } else if (espnLinkPanel) {
+              espnLinkPanel.style.display = "block";
+            }
+          } catch (err) {
+            console.error(err);
+            if (espnLinkPanel) espnLinkPanel.style.display = "block";
+          }
+        } catch (err) {
+          console.error(err);
+          if (loginError) {
+            loginError.style.display = "block";
+            loginError.textContent = "Login failed. Check your credentials and try again.";
+          }
+        }
+      });
+    }
+
+    if (espnLinkBtn && espnS2Input && espnSwidInput) {
+      espnLinkBtn.addEventListener("click", async () => {
+        const s2 = espnS2Input.value.trim();
+        const swid = espnSwidInput.value.trim();
+        if (!s2 || !swid) {
+          if (espnLinkError) {
+            espnLinkError.style.display = "block";
+            espnLinkError.textContent = "Please enter both espn_s2 and SWID.";
+          }
+          return;
+        }
+        if (espnLinkError) {
+          espnLinkError.style.display = "none";
+          espnLinkError.textContent = "";
+        }
+        try {
+          const resp = await fetch(API_BASE + "/auth/espn_link", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ espn_s2: s2, espn_swid: swid }),
+          });
+          if (!resp.ok) {
+            throw new Error(`HTTP ${resp.status}`);
+          }
+          if (espnLinkPanel) espnLinkPanel.style.display = "none";
+          await loadTeams();
+          await loadTopActions();
+        } catch (err) {
+          console.error(err);
+          if (espnLinkError) {
+            espnLinkError.style.display = "block";
+            espnLinkError.textContent =
+              "Failed to link ESPN. Double-check your cookies and try again.";
+          }
+        }
+      });
+    }
+
+    bootstrapApp();
+  </script>
+</body>
+</html>
+
+
