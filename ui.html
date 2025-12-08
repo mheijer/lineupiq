@@ -341,7 +341,7 @@
         font-size: 12px;
       ">
       <div style="margin-bottom:6px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.09em;">
-        Sign in to LineupIQ
+        Account
       </div>
       <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
         <input id="login-email" type="email" placeholder="Email" style="
@@ -376,6 +376,19 @@
             cursor: pointer;
           ">
           Log in
+        </button>
+        <button id="signup-toggle-btn" type="button" style="
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            background: transparent;
+            color: #9ca3af;
+            font-size: 11px;
+            padding: 4px 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            cursor: pointer;
+          ">
+          Need an account?
         </button>
       </div>
       <div id="login-error" class="error" style="margin-top:4px; display:none;"></div>
@@ -652,6 +665,7 @@
     const loginPasswordInput = document.getElementById("login-password");
     const loginButton = document.getElementById("login-btn");
     const loginError = document.getElementById("login-error");
+    const signupToggleBtn = document.getElementById("signup-toggle-btn");
     const manageTeamsBtn = document.getElementById("manage-teams-btn");
     const teamsPanel = document.getElementById("teams-panel");
     const teamsPanelBody = document.getElementById("teams-panel-body");
@@ -806,6 +820,9 @@
     // Execution mode: 'dry_run' (safe) or 'http' (live writes to ESPN).
     // Default to dry_run so you have to explicitly opt into live mode.
     let actionMode = "dry_run";
+
+    // Auth mode: "login" or "signup"
+    let authMode = "login";
 
     function updateModeButtons() {
       if (!modeDryRunBtn || !modeLiveBtn) return;
@@ -1129,6 +1146,17 @@
       applySelectedBtn.style.opacity = applySelectedBtn.disabled ? 0.6 : 1;
       applySelectedBtn.textContent =
         count > 0 ? `Apply selected (${count})` : "Apply selected";
+    }
+
+    function updateAuthModeUI() {
+      if (!loginButton || !signupToggleBtn) return;
+      if (authMode === "login") {
+        loginButton.textContent = "Log in";
+        signupToggleBtn.textContent = "Need an account?";
+      } else {
+        loginButton.textContent = "Sign up";
+        signupToggleBtn.textContent = "Have an account?";
+      }
     }
 
     async function loadTeamStateAndPlan(teamKey) {
@@ -1576,6 +1604,19 @@
           loginError.textContent = "";
         }
         try {
+          if (authMode === "signup") {
+            const regResp = await fetch(API_BASE + "/auth/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, password }),
+            });
+            if (!regResp.ok) {
+              throw new Error(`Sign up failed (HTTP ${regResp.status})`);
+            }
+          }
+
           const resp = await fetch(API_BASE + "/auth/login", {
             method: "POST",
             headers: {
@@ -1611,9 +1652,19 @@
           console.error(err);
           if (loginError) {
             loginError.style.display = "block";
-            loginError.textContent = "Login failed. Check your credentials and try again.";
+            loginError.textContent =
+              authMode === "login"
+                ? "Login failed. Check your credentials and try again."
+                : "Sign up failed. Try a different email or check the logs.";
           }
         }
+      });
+    }
+
+    if (signupToggleBtn) {
+      signupToggleBtn.addEventListener("click", () => {
+        authMode = authMode === "login" ? "signup" : "login";
+        updateAuthModeUI();
       });
     }
 
@@ -1657,9 +1708,11 @@
       });
     }
 
+    updateAuthModeUI();
     bootstrapApp();
   </script>
 </body>
 </html>
+
 
 
