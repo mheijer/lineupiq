@@ -3,5 +3,4 @@ uvicorn[standard]
 espn-api
 pandas
 requests
-lmxl
-
+lxml==4.9.3
