@@ -8,7 +8,9 @@ import os
 import secrets
 from datetime import datetime
 
-DB_PATH = Path("data") / "lineupiq_auth.db"
+# Allow the auth DB path to be overridden for hosted environments (e.g. Render
+# persistent disk). Locally we still default to ./data/lineupiq_auth.db.
+DB_PATH = Path(os.environ.get("LINEUPIQ_DB_PATH", "data/lineupiq_auth.db"))
 
 
 def _get_conn() -> sqlite3.Connection:

@@ -323,6 +323,20 @@
           ">
           Manage teams
         </button>
+        <button id="logout-btn" style="
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            background: transparent;
+            color: #9ca3af;
+            font-size: 11px;
+            padding: 4px 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            cursor: pointer;
+            display:none;
+          ">
+          Log out
+        </button>
         <div class="metric">
           <span class="metric-label">Week</span>
           <span class="metric-value" id="week-label">—</span>
@@ -667,6 +681,7 @@
     const loginError = document.getElementById("login-error");
     const signupToggleBtn = document.getElementById("signup-toggle-btn");
     const manageTeamsBtn = document.getElementById("manage-teams-btn");
+    const logoutBtn = document.getElementById("logout-btn");
     const teamsPanel = document.getElementById("teams-panel");
     const teamsPanelBody = document.getElementById("teams-panel-body");
     const teamsPanelClose = document.getElementById("teams-panel-close");
@@ -1083,6 +1098,7 @@
         const resp = await fetch(API_BASE + "/auth/me");
         if (resp.ok) {
           if (loginPanel) loginPanel.style.display = "none";
+          if (logoutBtn) logoutBtn.style.display = "inline-flex";
           // Now check ESPN link status.
           try {
             const statusResp = await fetch(API_BASE + "/auth/espn_status");
@@ -1107,6 +1123,7 @@
       }
       // Not authenticated or /auth/me failed.
       if (loginPanel) loginPanel.style.display = "block";
+      if (logoutBtn) logoutBtn.style.display = "none";
     }
 
     async function loadUserTeamsForPanel() {
@@ -1586,6 +1603,31 @@
       });
     }
 
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async () => {
+        try {
+          await fetch(API_BASE + "/auth/logout", { method: "POST" });
+        } catch (err) {
+          console.error(err);
+        }
+        // Reset UI state
+        if (logoutBtn) logoutBtn.style.display = "none";
+        if (loginPanel) loginPanel.style.display = "block";
+        if (espnLinkPanel) espnLinkPanel.style.display = "none";
+        teamSelect.innerHTML = "";
+        startersTable.innerHTML = "";
+        benchTable.innerHTML = "";
+        stashTable.innerHTML = "";
+        actionsTable.innerHTML = "";
+        topActionsTable.innerHTML = "";
+        planSummary.textContent = "No plan loaded";
+        currentTeamKey = null;
+        currentTeamPlanActions = [];
+        currentWaiverPlan = null;
+        updateApplyButtonState();
+      });
+    }
+
     // Initial load
     if (loginButton) {
       loginButton.addEventListener("click", async () => {
@@ -1629,6 +1671,7 @@
           }
           // On success, hide login and load data.
           if (loginPanel) loginPanel.style.display = "none";
+          if (logoutBtn) logoutBtn.style.display = "inline-flex";
           // After login, check ESPN link status before loading data.
           try {
             const statusResp = await fetch(API_BASE + "/auth/espn_status");
